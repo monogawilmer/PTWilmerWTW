@@ -1,0 +1,6 @@
+@FacturaWilmer_HostAddress = http://localhost:5230
+
+GET {{FacturaWilmer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
