@@ -33,7 +33,7 @@ namespace FacturaWilmer.Services
                     TblDetallesFacturas = new List<TblDetallesFactura>()
                 };
 
-                TblFactura? tblFactura = await _context.TblFacturas.FindAsync(factura.NumeroFactura);
+                TblFactura? tblFactura = await _context.TblFacturas.Where(x=>x.NumeroFactura == factura.NumeroFactura).FirstOrDefaultAsync();
 
                 if (tblFactura != null)
                 {
