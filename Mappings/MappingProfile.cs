@@ -16,6 +16,8 @@ namespace FacturaWilmer.Mappings
                                                             src.ImagenProducto != null
                                                                 ? $"data:image/{src.Ext};base64,{Convert.ToBase64String(src.ImagenProducto)}"
                                                                 : null));
+
+            CreateMap<TblFactura, FacturaDto>();
         }
     }
 }

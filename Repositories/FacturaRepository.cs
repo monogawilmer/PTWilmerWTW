@@ -1,6 +1,7 @@
 ﻿using FacturaWilmer.Data;
 using FacturaWilmer.Entities;
 using FacturaWilmer.Interfaces.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace FacturaWilmer.Repositories
 {
@@ -19,6 +20,22 @@ namespace FacturaWilmer.Repositories
             {
                 _context.TblFacturas.Add(factura);
                 await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+        }
+
+        public async Task<List<TblFactura>> ObtenerFacturas(int? idCliente, int? numeroFactura)
+        {
+            try
+            {
+                List<TblFactura> listaFactura = new List<TblFactura>();
+                listaFactura = await (idCliente != null ?
+                                                        _context.TblFacturas.Where(x => x.IdCliente == idCliente).ToListAsync() : 
+                                                        _context.TblFacturas.Where(x => x.NumeroFactura == numeroFactura).ToListAsync());
+                return listaFactura;
             }
             catch (Exception ex)
             {

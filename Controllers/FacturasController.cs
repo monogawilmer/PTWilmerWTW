@@ -23,9 +23,23 @@ namespace FacturaWilmer.Controllers
                 await _facturaService.CrearFacturaAsync(dto);
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Se ha presentado un error, por favor comunicarse con soporte.");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerFacturas(int? idCliente, int? numeroFactura)
+        {
+            try
+            {
+                await _facturaService.ObtenerFacturas(idCliente, numeroFactura);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

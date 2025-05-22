@@ -4,6 +4,7 @@ using FacturaWilmer.DTOs;
 using FacturaWilmer.Entities;
 using FacturaWilmer.Interfaces.IRepositories;
 using FacturaWilmer.Interfaces.IServices;
+using FacturaWilmer.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FacturaWilmer.Services
@@ -11,12 +12,14 @@ namespace FacturaWilmer.Services
     public class FacturaService : IFacturaService
     {
         private readonly IFacturaRepository _facturaRepository;
+        private readonly IMapper _mapper;
         private readonly DevLabContext _context;
 
-        public FacturaService(IFacturaRepository facturaRepository, DevLabContext context)
+        public FacturaService(IFacturaRepository facturaRepository, DevLabContext context, IMapper mapper)
         {
             _facturaRepository = facturaRepository;
             _context = context;
+            _mapper = mapper;
         }
         public async Task CrearFacturaAsync(CrearFacturaDto dto)
         {
@@ -66,6 +69,24 @@ namespace FacturaWilmer.Services
                 factura.NumeroTotalArticulos = totalArticulos;
 
                 await _facturaRepository.CrearFacturaAsync(factura);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
+            }
+        }
+
+        public async Task<List<FacturaDto>> ObtenerFacturas(int? idCliente, int? numeroFactura)
+        {
+            try
+            {
+                if(idCliente == null && numeroFactura == null)
+                {
+                    throw new ApplicationException("Digite uno de los dos campos.");
+                }
+
+                List<TblFactura> facturas = await _facturaRepository.ObtenerFacturas(idCliente, numeroFactura);
+                return _mapper.Map<List<FacturaDto>>(facturas);
             }
             catch (Exception ex)
             {
