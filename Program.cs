@@ -22,6 +22,17 @@ builder.Services.AddScoped<IProductoService, ProductoService>();
 //Mapping
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 builder.Services.AddDbContext<DevLabContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
@@ -42,6 +53,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("PermitirAngular");
 
 app.MapControllers();
 
